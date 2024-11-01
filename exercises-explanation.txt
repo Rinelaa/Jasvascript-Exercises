@@ -1,0 +1,59 @@
+USHTRIMI 1
+Ne ushtrimin e pare eshte ndertuar nje funksion "checkInstanceOf" i cili kontrollon nese nje objekt eshte instance e nje klase. Menyra qe ai e arrin kete gje eshte duke perdorur mekanizmin e prototype chain. Perdot]ret cikli i kontrollimit te trashegimise midis objekteve dhe klasave. 
+if (obj === null || typeof classFunction!=='function') {
+    return false;
+} Shpjegimi i kesaj eshte qe nese obj eshte null ose classFunction eshte i ndryeshem nga nje funksion, atehere kthehet false, sepse objekti nuk eshte i vlefshem ose klasa e dhene nuk eshte nje funksion. 
+let objPrototype = Object.getPrototypeOf(obj); Ky hap merr prototipin e objektit obj. Ky prototip kontrollon nese obj trashegon nga classFunction.
+Cikli while ka kushtin qe objPrototype te jete e ndrysme nga null. Nese prototipi aktual objPrototype perputhet me classFunction.prototype, funksioni kthen true sepse ne kete rast eshte nje instance e classFunction.
+Nese nuk perputhet leviz me lart ne zinxhirin e prototipave derisa objPrototype te behet null. Kur cikli mbaron dhe ska perputhje prototipash kthehet false, perndryshe kthehet true.
+Te shembulli i checkIfInstanceOf(Date(), Date).  Date  pa new eshte nje thirrje funksioni qe kthen nje varg qe perfaqeson kohen aktuale, jo nje instance te Date. Prandaj dhe eshte false si pergjigjje.
+
+
+USHTRIMI 2
+Te ushtrimi dy kemi nje funksion countMoves. m eshte numri i rreshtave ne array, n eshte numri i shtyllave ne array, diffColumn tregon qe te gjitha rreshtat mund te konsiderohen ne shtyllen e pare, currentColumn perdoret per te mbajtur shenim rreshtat qe mund te kalojne ne nje kolone tjeter bazuar ne kushtin. move eshte variabel qe numeron levizjet e lejuara.
+Fillimisht vendoset cikli qe pershkon shtyllat nga e dyta deri ne fund, checkMove eshte nje boolean i cili kontrollon nese te pakten nje rresht eshte ne gjendje te kaloje nga shtylla j-1 ne shtyllen j .
+Brenda ciklit kontrollon tre kushte : 
+if (i - 1 >= 0 && diffColumn[i - 1] && array[i - 1][j - 1] < array[i][j]) {
+    currentColumn[i] = true;
+    checkMove = true;
+} Kontrollon per nje kalim nga nje qelize i,j ne i+1, j+1. Qeliza leviz nje indeks me larte ne shtylle dhe ne rresht .
+if (i + 1 < m && diffColumn[i + 1] && array[i + 1][j - 1] < array[i][j]) {
+        currentColumn[i] = true;
+        checkMove = true;
+    } Ky kusht kontrollon nese mund t ebehet levizja ne nje shtylle te njjete por te ndryshohet rresht, gjithmone ne perputhje me kushtin qe qeliza ku ne po levizim te jete me e madhe se te ajo ku ndodhemi aktualisht.
+if (diffColumn[i] && array[i][j - 1] < array[i][j]) {
+        currentColumn[i] = true;
+        checkMove = true;
+    }Ky bllok if kontrollon rritjen e vlerës brenda të njëjtit rresht, nga kolona majtas në kolonen aktuale j. Nese ky kusht plotesohet, rreshti aktual (i) mund te vazhdoje ne kolonen tjeter. Kështu, checkMove dhe currentColumn[i] vendosen si true, duke sinjalizuar qe ky rresht ploteson kushtet per te vazhduar ne kolonen tjeter.
+const temp = diffColumn; 
+diffColumn = currentColumn; 
+currentColumn = temp; 
+if (!checkMove) break;
+move++; Perditesimi i diffColumn: diffColumn dhe currentColumn nderrojne vlerat duke ruajtur vleren e diffColumn ne temp. diffColumn përmban rreshtat që mund të kalojnë në kolonen tjeter. Kushti if (!checkMove) break;: Nese checkMove eshte false, do te thote se asnje rresht nuk mund te kaloje ne kolonen tjeter dhe cikli per kolonat nderpritet.
+move++: Nese ka patur nje levizje, move inkrementohet për te numeruar ate levizje.
+
+
+USHTRIMI3 
+Ushtrimin e trete e kam bere qe te te dhenat te futen nga nga perdoruesi dhe jo te ekzekutohen shembujt. Prandaj dhe si fillim krijohet njenderfaq readline per leximin e inputeve dhe shkrimin e outputit ne terminal.  input:process.stdin dhe output:process.stdout e lidhin kete nderfaqe me terminalin. Pastaj shkruajme funksionin per mergeArrays qe bashkon nums1 dhe nums2 duke perdorur tri indekse. i per te ndjekur elementet ne nums1 dhe fillon ne m-1. j per te ndjekur elementet e mbetur ne nums2 fillon n-1, k per pozicionin e ardheshem ne fund te nums1  ku do te vendosen elementet me te medhenj te arrays se re.
+Cikli while bashkon dy vektoret duke krahasuar vlerat nga fundi nums1 dhe nums2. Nese nums[i] eshte me e madhe se nums[2], ajo vendoset ne pozicionin k te nums1 dhe i dhe k zvogelohen per te vazhduar krahasimet. Perndryshe nums2[j] vendoser ne nums1[k] dhe zvogelohen j dhe k. Nese elemente mbeten ne nums2 ky cikel shton ato elemente te mbetura ne nums1 ne rend te kundert pasi nums2 eshte tashme i renditur.
+console.log("Merged Array:", nums1); Ky line shfaq nums1 qe ne fund permban elementet e nums1 dhe nums2 te bashkuara dhe te renditura.
+
+
+USHTRIMI4 
+Ky kod implementon nje klase te quajtur TemporaryCache e cila funksionon si nje cache per te ruajtur celesar dhe vlerat me nje kohe te caktuar vlefshemeri. Klasa lejon te vendosesh dhe marresh te dhena nga cache si edhe te numerosh.
+constructor(){} inicializon nje Map, e cila do te perdoret per te ruajtur celesat. 
+key: Celesi unik per kete vlere ne cache.
+value: Vlera per te cilen eshte ky çeles.
+duration: Koha (ne milisekonda) per te cilen vlera do të jete e vlefshme.
+Merret koha atuale me Date.now(). Kontrollohet nese celesi key ekziston ne cache dhe nese koha e expiryTime pra e skadimit eshte ende e vlefshme qe do te thote me e madhe ne now. Ky rezultat do te ruhet ne isUnexpiredKey.
+Vendoset celesi dhe vlera ne cache, duke perfshire gjithashtu expiryTime=now+duration. Kthen isUnexpiredKey:true nese celesi ekziston dhe nuk kishte skaduar.  Metoda get(key) merr vleren e celesit nga cache; merr elementin item per celesin e dhene dhe kontrollohet nese item ekzsiton si fillim dhe expiryTime eshte akoma e vlefshme. Nese keto dy kushte nuk plotesohen atehere kthen -1. 
+Metoda count() Kthen numrin e elementeve te vlefshem ne cache , perpara se te kthehet numri therritet metoda cleanup() i cila do te heqi cdo element te skaduar nga cache. Metod cleanup() iteron permes cdo celesi. Nese koha expiryTime eshte me e vogel se now , atehere celesi hiqet nga cache , pra koha e skadimit eshte e barabarte me now.
+
+USHTRIMI 5 
+Funksioni  debounce perdoret per te kufizuar numrin e hereve qe nje funksion mund te thirret gjate nje periudhe te caktuar kohe. Kjo nuk lejon thirrjet e shumta te nje funksioni qe ndoshin njera pas tjetres.  fn: Funksioni qe do te thirret pas nje periudhe te caktuar (debouncing).
+t: Koha ne milisekonda per te pritur para se te thirret fn.let timer eshte nje variabel qe ruan ID e setTimeout qe perdoret per te anuluar thirrjen e funksionit te meparshem. 
+clearTimeout(timer);: Anulon çdo thirrje te pritur për fn nese funksioni eshte thirrur perseri brenda periudhes t.
+timer = setTimeout(() => {...}, t);: Vendos nje timer per te thirrur fn pas t milisekondash. Kur koha kalon, fn do te thirret me argumentet e dhena (...args).
+const start=Date.now() ruhet koha e fillestare per te llogaritur kohen e kaluar. 
+function log(...inputs) {...}: Funksioni qe do te thirret pas debouncing. Ai merr argumentet dhe i logon ato bashke me kohen e kaluar qe nga fillimi.
+const dlog = debounce(log, t);: Krijon nje version debounced te funksionit log.
